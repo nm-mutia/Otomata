@@ -1,4 +1,5 @@
 from html.parser import HTMLParser
+from html.entities import name2codepoint
 
 total = 0
 startag = 0
@@ -7,8 +8,13 @@ datax = 0
 comment = 0
 decl = 0
 attrb = 0
+symbol = 0
 
 class MyHTMLParser(HTMLParser):
+    def __init__(self):
+        HTMLParser.__init__(self, convert_charrefs=False)
+        self.fed = []
+        
     def handle_decl(self, data):
         print("Decl \t\t:", data)
         global decl
@@ -28,6 +34,21 @@ class MyHTMLParser(HTMLParser):
         global endtag
         endtag = endtag + 1
 
+    def handle_entityref(self, name):
+        c = chr(name2codepoint[name])
+        print("Named ent:", c)
+        global symbol
+        symbol = symbol + 1
+
+    def handle_charref(self, name):
+        if name.startswith('x'):
+            c = chr(int(name[1:], 16))
+        else:
+            c = chr(int(name))
+        print("Num ent  :", c)
+        global symbol
+        symbol = symbol + 1
+        
     def handle_data(self, data):
         if data == '\n' :
             return
@@ -37,7 +58,7 @@ class MyHTMLParser(HTMLParser):
             print("Some data \t:", data)
             global datax
             datax = datax + 1
-            
+        
     def handle_comment(self, data):
         print("Comment \t:", data)
         global comment
@@ -59,6 +80,7 @@ print (' - data : ', datax)
 print (' - end tag : ', endtag)
 print (' - comment : ', comment)
 print (' - total : ', total)
+print (' - symbol : ', symbol)
         
         
         

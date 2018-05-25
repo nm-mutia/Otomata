@@ -13,6 +13,9 @@
 	<p>&#x20AC;&gt;&#62;&#x3E;
 	&gt; &#62;</p>
 	<!-- <p>Enter names in the fields, then click "Submit" to submit the form:</p> -->
+	<?php
+		echo 'hehe';
+	?>
 	<form id="frm1" action="/action_page.php">
 	  First name: <input type="text" name="fname"><br>
 	  Last name: <input type="text" name="lname"><br><br>
