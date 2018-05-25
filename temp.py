@@ -8,13 +8,6 @@ This is a temporary script file.
 from html.parser import HTMLParser
 import codecs
 
-reserve = ['false','class','finally','is','return'
-           ,'none','continue','for','lambda','try'
-           ,'true','def','from','nonlocal','while'
-           ,'and','del','global','not','with','as'
-           ,'elif','if','or','yield','assert','else'
-           ,'import','pass','break','except','in','raise']
-
 operator = ['+', '-', '*', '**', '/',
             '//', '%', '@', '<<', '>>',
             '&', '|', '^', '~','<','>',
@@ -22,22 +15,27 @@ operator = ['+', '-', '*', '**', '/',
 
 # create a subclass and override the handler methods
 class MyHTMLParser(HTMLParser):
+    def handle_decl(self, data):
+        print("Decl \t\t:", data)
+        
     def handle_starttag(self, tag, attrs):
-        print ("Encountered a start tag:", tag)
+        print ("Start tag \t:", tag)
         for attr in attrs:
-            print("     attr:", attr)
+            print("attr\t\t:", attr)
 
     def handle_endtag(self, tag):
-        print ("Encountered an end tag :", tag)
+        print ("End tag \t:", tag)
 
     def handle_data(self, data):
-        if data == reserve :
-            print("Reserved Word : ", data)
-        elif data == operator :
-            print("Operator : ", data)
+        if data == '\n' :
+            return
+        elif not data.strip():
+            return
         else :
-            print("Encountered some data  :", data)
-
+            print("Some data \t:", data)
+            
+    def handle_comment(self, data):
+        print("Comment \t:", data)
 
 
 # instantiate the parser and fed it some HTML
